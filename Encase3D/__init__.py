@@ -15,7 +15,7 @@ class Strategy(object):
 def encase_cargos_into_container(
     cargos:Iterable, 
     container:Container, 
-    strategy:Strategy
+    strategy:type
 ):
     sorted_cargos:List[Cargo] = strategy.encasement_sequence(cargos)
     i = 0

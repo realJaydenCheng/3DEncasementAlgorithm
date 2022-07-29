@@ -9,6 +9,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 fig:Figure = plt.figure()
 ax = fig.add_subplot(1, 1, 1, projection='3d')
 ax.view_init(elev=20, azim=40)
+plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
 
 def draw_reslut(setted_container:Container):
     plt.gca().set_box_aspect((
