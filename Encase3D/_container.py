@@ -35,7 +35,7 @@ class Container(object):
                 encasable = False
         return encasable
 
-    def _encase(self, cargo: Cargo):
+    def _encase(self, cargo: Cargo) -> Point:
         # flag存储放置位置, (-1, -1, 0)放置失败并调整参考线, (-1, -1, -1)放置失败.
         flag = Point(-1, -1, -1)  
         # 用于记录执行前的参考线位置, 便于后续比较
