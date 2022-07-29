@@ -1,12 +1,14 @@
 from typing import Iterable, List
-from _cargo import *
-from _container import *
+from Encase3D._cargo import *
+from Encase3D._container import *
 
 class Strategy(object):
-    # 继承此类 重写两个函数 实现自定义两个装载策略: 装箱顺序 和 货物摆放.
+    # 继承此类 重写两个静态函数 实现自定义两个装载策略: 装箱顺序 和 货物.
+    @staticmethod
     def encasement_sequence(cargos:Iterable) -> Iterable:
         return cargos
 
+    @staticmethod
     def choose_cargo_poses(cargo:Cargo) -> list:
         return list(CargoPose)
 
@@ -16,8 +18,9 @@ def encase_cargos_into_container(
     strategy:Strategy
 ):
     sorted_cargos:List[Cargo] = strategy.encasement_sequence(cargos)
-    i, j = 0, 0
+    i = 0
     while i < len(sorted_cargos):
+        j = 0
         cargo = sorted_cargos[i]
         poses = strategy.choose_cargo_poses(cargo)
         while j < len(poses):
@@ -35,8 +38,10 @@ def encase_cargos_into_container(
 
 
 class VolumeGreedyStrategy(Strategy):
+    @staticmethod
     def encasement_sequence(cargos:Iterable) -> Iterable:
-        return sorted(cargos, key= lambda cargo:cargo.volume)
+        return sorted(cargos, key= lambda cargo:cargo.volume,reverse=1)
 
+    @staticmethod
     def choose_cargo_poses(cargo:Cargo) -> list:
         return list(CargoPose)

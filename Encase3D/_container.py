@@ -1,4 +1,4 @@
-from _cargo import *
+from Encase3D._cargo import *
 from copy import deepcopy
 
 
@@ -40,7 +40,7 @@ class Container(object):
         flag = Point(-1, -1, -1)  
         # 用于记录执行前的参考线位置, 便于后续比较
         history = [self._horizontal_line, self._vertical_line]
-        def __is_line_changed(horizontal_line:int, vertical_line:int) -> bool:
+        def __is_line_changed() -> bool:
             return (
                 not flag.is_valid and # 防止破坏已经确定可放置的点位, 即只能在(-1, -1, -1)基础上改
                 self._horizontal_line == history[0] and 
@@ -60,7 +60,7 @@ class Container(object):
                 self._horizontal_line == self.length
             ):
                 if self.is_encasable(Point(0, 0, self._vertical_line), cargo):
-                    flag = (0, 0, self._vertical_line)
+                    flag = Point(0, 0, self._vertical_line)
                     self._vertical_line += cargo.height
                     self._horizontal_line = cargo.length 
                     # 放置了货物 不检测参考线改变
@@ -107,14 +107,18 @@ class Container(object):
         xyz = [site.x, site.y, site.z] 
         # 序列化坐标以执行遍历递减操作, 减少冗余
         for i in range(3):
-            while xyz[i] > 1:
+            is_continue = True
+            while xyz[i] > 1 and is_continue:
                 xyz[i] -= 1
                 temp.point = Point(xyz[0], xyz[1], xyz[2])
                 for setted_cargo in self._setted_cargos:
                     if not _is_cargos_collide(setted_cargo, temp):
                         continue
                     xyz[i] += 1
+                    is_continue = False
                     break
+
+                
         cargo.point = Point(xyz[0], xyz[1], xyz[2]) # 反序列化
 
     @property

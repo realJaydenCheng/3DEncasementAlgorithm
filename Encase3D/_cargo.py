@@ -65,8 +65,8 @@ class Cargo(object):
         return self._point
 
     @point.setter
-    def point(self, x: int, y: int, z: int):
-        self._point = Point(x, y, z)
+    def point(self, new_point:Point):
+        self._point = new_point
 
     @property
     def x(self) -> int:
@@ -107,13 +107,13 @@ class Cargo(object):
     def get_shadow_of(self, planar: str) -> tuple:
         if planar in ("xy", "yx"):
             x0, y0 = self.x, self.y
-            x1, y1 = self.x + self.length, self.y, + self.width
+            x1, y1 = self.x + self.length, self.y + self.width
         elif planar in ("xz", "zx"):
             x0, y0 = self.x, self.z
-            x1, y1 = self.x + self.length, self.z, + self.height
+            x1, y1 = self.x + self.length, self.z + self.height
         elif planar in ("yz", "zy"):
             x0, y0 = self.y, self.z
-            x1, y1 = self.y, + self.width, self.z, + self.height
+            x1, y1 = self.y + self.width, self.z + self.height
         return (x0, y0, x1, y1)
 
     @property
@@ -128,5 +128,5 @@ class Cargo(object):
     def volume(self) -> int:
         reslut = 1
         for i in self._shape:
-            result *= i
+            reslut *= i
         return reslut

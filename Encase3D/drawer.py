@@ -1,14 +1,14 @@
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 import numpy as np
-from _cargo import *
-from _container import *
+from Encase3D._cargo import *
+from Encase3D._container import *
 
 plt.rcParams['axes.unicode_minus'] = False
 plt.rcParams['font.sans-serif'] = ['SimHei']
 fig:Figure = plt.figure()
 ax = fig.add_subplot(1, 1, 1, projection='3d')
-ax.view_init(elev=30, azim=40)
+ax.view_init(elev=20, azim=40)
 
 def draw_reslut(setted_container:Container):
     plt.gca().set_box_aspect((
@@ -19,6 +19,7 @@ def draw_reslut(setted_container:Container):
     _draw_container(setted_container)
     for cargo in setted_container._setted_cargos:
         _draw_cargo(cargo)
+    plt.show()
 
 def _draw_container(container:Container):
     _plot_linear_cube(
