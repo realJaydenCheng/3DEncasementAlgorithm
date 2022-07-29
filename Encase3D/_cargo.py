@@ -19,6 +19,12 @@ class Point(object):
     def __repr__(self) -> str:
         return f"({self.x},{self.y},{self.z})"
 
+    @property
+    def is_valid(self) -> bool:
+        return (
+            self.x >= 0 and self.y >=0 and self.z>= 0
+        )
+
 
 class Cargo(object):
     def __init__(self, length: int, width: int, height: int) -> None:
