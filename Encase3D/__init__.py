@@ -9,7 +9,7 @@ class Strategy(object):
         return cargos
 
     @staticmethod
-    def choose_cargo_poses(cargo:Cargo) -> list:
+    def choose_cargo_poses(cargo:Cargo, container:Container) -> list:
         return list(CargoPose)
 
 def encase_cargos_into_container(
@@ -22,7 +22,7 @@ def encase_cargos_into_container(
     while i < len(sorted_cargos):
         j = 0
         cargo = sorted_cargos[i]
-        poses = strategy.choose_cargo_poses(cargo)
+        poses = strategy.choose_cargo_poses(cargo, container)
         while j < len(poses):
             cargo.pose = poses[j]
             is_encased = container._encase(cargo)
@@ -43,5 +43,5 @@ class VolumeGreedyStrategy(Strategy):
         return sorted(cargos, key= lambda cargo:cargo.volume,reverse=1)
 
     @staticmethod
-    def choose_cargo_poses(cargo:Cargo) -> list:
+    def choose_cargo_poses(cargo:Cargo, container:Container) -> list:
         return list(CargoPose)
