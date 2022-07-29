@@ -21,9 +21,11 @@ class Point(object):
 
     @property
     def is_valid(self) -> bool:
-        return (
-            self.x >= 0 and self.y >=0 and self.z>= 0
-        )
+        return self.x >= 0 and self.y >=0 and self.z>= 0
+    
+    @property
+    def tuple(self) -> tuple:
+        return (self.x, self.y, self.z)
 
 
 class Cargo(object):
