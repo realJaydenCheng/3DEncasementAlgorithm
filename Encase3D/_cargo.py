@@ -85,11 +85,11 @@ class Cargo(object):
         self._point = Point(self.x, new_y, self.z)
 
     @property
-    def x(self) -> int:
+    def z(self) -> int:
         return self._point.z
 
-    @x.setter
-    def x(self, new_z: int):
+    @z.setter
+    def z(self, new_z: int):
         self._point = Point(self.z, self.y, new_z)
 
     @property

@@ -3,7 +3,7 @@ from _cargo import *
 from _container import *
 
 class Strategy(object):
-    # 继承此类 重写两个函数 实现自定义 装箱顺序 和 货物形态 两个装载策略.
+    # 继承此类 重写两个函数 实现自定义两个装载策略: 装箱顺序 和 货物摆放.
     def encasement_sequence(cargos:Iterable) -> Iterable:
         return cargos
 
