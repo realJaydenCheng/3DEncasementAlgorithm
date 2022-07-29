@@ -36,7 +36,16 @@ class Container(object):
         return encasable
 
     def _encase(self, cargo: Cargo):
-        flag = Point(-1, -1, -1)  # flag存储放置位置, (-1, -1, -1) 表示放置失败
+        # flag存储放置位置, (-1, -1, 0)放置失败并调整参考线, (-1, -1, -1)放置失败.
+        flag = Point(-1, -1, -1)  
+        # 用于记录执行前的参考线位置, 便于后续比较
+        history = [self._horizontal_line, self._vertical_line]
+        def __is_line_changed(horizontal_line:int, vertical_line:int) -> bool:
+            return (
+                not flag.is_valid and # 防止破坏已经确定可放置的点位, 即只能在(-1, -1, -1)基础上改
+                self._horizontal_line == history[0] and 
+                self._vertical_line == history[-1]
+            ) 
         for point in self._available_points:
             if (
                 self.is_encasable(point, cargo) and
@@ -53,10 +62,13 @@ class Container(object):
                 if self.is_encasable(Point(0, 0, self._vertical_line), cargo):
                     flag = (0, 0, self._vertical_line)
                     self._vertical_line += cargo.height
-                    self._horizontal_line = cargo.length
+                    self._horizontal_line = cargo.length 
+                    # 放置了货物 不检测参考线改变
                 elif self._vertical_line < self.height:
                     self._vertical_line = self.height
                     self._horizontal_line = self.length
+                    if __is_line_changed():
+                        flag.z == 0 # 放置失败并调整参考线
             else:
                 for point in self._available_points:
                     if (
@@ -68,8 +80,11 @@ class Container(object):
                         flag = point
                         self._horizontal_line += cargo.length
                         break
+                        # 放置了货物 不检测参考线改变
                 if not flag.is_valid:
                     self._horizontal_line = self.length
+                    if __is_line_changed():
+                        flag.z == 0 # 放置失败并调整参考线
         if flag.is_valid:
             cargo.point = flag
             if flag in self._available_points:
@@ -89,7 +104,8 @@ class Container(object):
         temp = deepcopy(cargo)
         if not self.is_encasable(site, cargo):
             return None
-        xyz = [site.x, site.y, site.z]
+        xyz = [site.x, site.y, site.z] 
+        # 序列化坐标以执行遍历递减操作, 减少冗余
         for i in range(3):
             while xyz[i] > 1:
                 xyz[i] -= 1
@@ -99,7 +115,7 @@ class Container(object):
                         continue
                     xyz[i] += 1
                     break
-        cargo.point = Point(xyz[0], xyz[1], xyz[2])
+        cargo.point = Point(xyz[0], xyz[1], xyz[2]) # 反序列化
 
     @property
     def length(self) -> int:

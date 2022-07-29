@@ -18,6 +18,9 @@ class Point(object):
 
     def __repr__(self) -> str:
         return f"({self.x},{self.y},{self.z})"
+    
+    def __eq__(self, __o: object) -> bool:
+        return self.x == __o.x and self.y == __o.y and self.z == __o.z
 
     @property
     def is_valid(self) -> bool:
