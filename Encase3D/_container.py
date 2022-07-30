@@ -106,7 +106,7 @@ class Container(object):
             return None
         xyz = [site.x, site.y, site.z] 
         # 序列化坐标以执行遍历递减操作, 减少冗余
-        for i in range(3):
+        for i in range(3): # 012 分别表示 xyz
             is_continue = True
             while xyz[i] > 1 and is_continue:
                 xyz[i] -= 1
@@ -117,8 +117,6 @@ class Container(object):
                     xyz[i] += 1
                     is_continue = False
                     break
-
-                
         cargo.point = Point(xyz[0], xyz[1], xyz[2]) # 反序列化
 
     @property
@@ -138,7 +136,7 @@ class Container(object):
         return self.height * self.length * self.width
 
 
-def _is_rectangles_overlap(rec1, rec2) -> bool:
+def _is_rectangles_overlap(rec1:tuple, rec2:tuple) -> bool:
     return not (
         rec1[0] >= rec2[2] or rec1[1] >= rec2[3] or
         rec2[0] >= rec1[2] or rec2[1] >= rec1[3]

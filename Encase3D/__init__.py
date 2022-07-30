@@ -18,17 +18,17 @@ def encase_cargos_into_container(
     strategy:type
 ):
     sorted_cargos:List[Cargo] = strategy.encasement_sequence(cargos)
-    i = 0
+    i = 0 # 记录发当前货物
     while i < len(sorted_cargos):
-        j = 0
+        j = 0 # 记录当前摆放方式
         cargo = sorted_cargos[i]
         poses = strategy.choose_cargo_poses(cargo, container)
         while j < len(poses):
             cargo.pose = poses[j]
             is_encased = container._encase(cargo)
             if is_encased.is_valid:
-                break
-            j += 1
+                break # 可以装入 不在考虑后续摆放方式
+            j += 1  # 不可装入 查看下一个摆放方式
         if is_encased.is_valid:
             i += 1 # 成功放入 继续装箱
         elif is_encased == Point(-1,-1,0):
