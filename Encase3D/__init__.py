@@ -16,7 +16,7 @@ def encase_cargos_into_container(
     cargos:Iterable, 
     container:Container, 
     strategy:type
-):
+) -> float:
     sorted_cargos:List[Cargo] = strategy.encasement_sequence(cargos)
     i = 0 # 记录发当前货物
     while i < len(sorted_cargos):
@@ -35,6 +35,10 @@ def encase_cargos_into_container(
             continue # 没放进去但是修改了参考线位置 重装
         else :
             i += 1 # 纯纯没放进去 跳过看下一个箱子
+    return sum(list(map(
+            lambda cargo:cargo.volume,container._setted_cargos
+        ))) / container.volume
+
 
 
 class VolumeGreedyStrategy(Strategy):

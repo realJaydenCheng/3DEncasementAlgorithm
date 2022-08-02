@@ -1,3 +1,5 @@
+from time import time
+from typing import List
 from Encase3D._cargo import *
 from copy import deepcopy
 
@@ -9,11 +11,14 @@ class Container(object):
         self._height = height
         self._refresh()
 
+    def __repr__(self) -> str:
+        return f"{self._length}, {self._width}, {self._height}"
+
     def _refresh(self):
         self._horizontal_line = 0  # 水平放置参考线
         self._vertical_line = 0  # 垂直放置参考线
         self._available_points = [Point(0, 0, 0)]  # 可放置点有序集合
-        self._setted_cargos = []
+        self._setted_cargos : List[Cargo] = []
 
     def _sort_available_points(self):
         self._available_points.sort(key=lambda x: x.z)
@@ -119,6 +124,17 @@ class Container(object):
                     break
         cargo.point = Point(xyz[0], xyz[1], xyz[2]) # 反序列化
 
+    def save_encasement_as_file(self):
+        file = open(f"{int(time())}_encasement.csv",'w',encoding='utf-8')
+        file.write(f"index,x,y,z,length,width,height\n")
+        i = 1
+        for cargo in self._setted_cargos:
+            file.write(f"{i},{cargo.x},{cargo.y},{cargo.z},")
+            file.write(f"{cargo.length},{cargo.width},{cargo.height}\n")
+            i += 1
+        file.write(f"container,,,,{self}\n")
+        file.close()
+
     @property
     def length(self) -> int:
         return self._length
@@ -132,7 +148,7 @@ class Container(object):
         return self._height
 
     @property
-    def getVolume(self) -> int:
+    def volume(self) -> int:
         return self.height * self.length * self.width
 
 
