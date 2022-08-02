@@ -15,8 +15,8 @@ class Container(object):
         return f"{self._length}, {self._width}, {self._height}"
 
     def _refresh(self):
-        self._horizontal_line = 0  # 水平放置参考线
-        self._vertical_line = 0  # 垂直放置参考线
+        self._horizontal_planar = 0  # 水平放置参考面
+        self._vertical_planar = 0  # 垂直放置参考面
         self._available_points = [Point(0, 0, 0)]  # 可放置点有序集合
         self._setted_cargos : List[Cargo] = []
 
@@ -41,55 +41,55 @@ class Container(object):
         return encasable
 
     def _encase(self, cargo: Cargo) -> Point:
-        # flag存储放置位置, (-1, -1, 0)放置失败并调整参考线, (-1, -1, -1)放置失败.
+        # flag存储放置位置, (-1, -1, 0)放置失败并调整参考面, (-1, -1, -1)放置失败.
         flag = Point(-1, -1, -1)  
-        # 用于记录执行前的参考线位置, 便于后续比较
-        history = [self._horizontal_line, self._vertical_line]
+        # 用于记录执行前的参考面位置, 便于后续比较
+        history = [self._horizontal_planar, self._vertical_planar]
         def __is_line_changed() -> bool:
             return (
                 not flag.is_valid and # 防止破坏已经确定可放置的点位, 即只能在(-1, -1, -1)基础上改
-                self._horizontal_line == history[0] and 
-                self._vertical_line == history[-1]
+                self._horizontal_planar == history[0] and 
+                self._vertical_planar == history[-1]
             ) 
         for point in self._available_points:
             if (
                 self.is_encasable(point, cargo) and
-                point.x + cargo.length < self._horizontal_line and
-                point.z + cargo.height < self._vertical_line
+                point.x + cargo.length < self._horizontal_planar and
+                point.z + cargo.height < self._vertical_planar
             ):
                 flag = point
                 break
         if not flag.is_valid:
             if (
-                self._horizontal_line == 0 or
-                self._horizontal_line == self.length
+                self._horizontal_planar == 0 or
+                self._horizontal_planar == self.length
             ):
-                if self.is_encasable(Point(0, 0, self._vertical_line), cargo):
-                    flag = Point(0, 0, self._vertical_line)
-                    self._vertical_line += cargo.height
-                    self._horizontal_line = cargo.length 
-                    # 放置了货物 不检测参考线改变
-                elif self._vertical_line < self.height:
-                    self._vertical_line = self.height
-                    self._horizontal_line = self.length
+                if self.is_encasable(Point(0, 0, self._vertical_planar), cargo):
+                    flag = Point(0, 0, self._vertical_planar)
+                    self._vertical_planar += cargo.height
+                    self._horizontal_planar = cargo.length 
+                    # 放置了货物 不检测参考面改变
+                elif self._vertical_planar < self.height:
+                    self._vertical_planar = self.height
+                    self._horizontal_planar = self.length
                     if __is_line_changed():
-                        flag.z == 0 # 放置失败并调整参考线
+                        flag.z == 0 # 放置失败并调整参考面
             else:
                 for point in self._available_points:
                     if (
-                        point.x == self._horizontal_line and
+                        point.x == self._horizontal_planar and
                         point.y == 0 and
                         self.is_encasable(point, cargo) and
-                        point.z + cargo.height <= self._vertical_line
+                        point.z + cargo.height <= self._vertical_planar
                     ):
                         flag = point
-                        self._horizontal_line += cargo.length
+                        self._horizontal_planar += cargo.length
                         break
-                        # 放置了货物 不检测参考线改变
+                        # 放置了货物 不检测参考面改变
                 if not flag.is_valid:
-                    self._horizontal_line = self.length
+                    self._horizontal_planar = self.length
                     if __is_line_changed():
-                        flag.z == 0 # 放置失败并调整参考线
+                        flag.z == 0 # 放置失败并调整参考面
         if flag.is_valid:
             cargo.point = flag
             if flag in self._available_points:

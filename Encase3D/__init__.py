@@ -32,7 +32,7 @@ def encase_cargos_into_container(
         if is_encased.is_valid:
             i += 1 # 成功放入 继续装箱
         elif is_encased == Point(-1,-1,0):
-            continue # 没放进去但是修改了参考线位置 重装
+            continue # 没放进去但是修改了参考面位置 重装
         else :
             i += 1 # 纯纯没放进去 跳过看下一个箱子
     return sum(list(map(

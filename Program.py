@@ -4,10 +4,10 @@ from Encase3D import drawer
 
 
 if __name__ == "__main__":
-    cargos = [Cargo(170,100,120) for i in range(30)]
-    cargos.extend([Cargo(100,80,90) for i in range(30)])
-    cargos.extend([Cargo(150,120,90) for i in range(30)])
-    cargos.extend([Cargo(210,120,100) for i in range(30)])
+    cargos = [Cargo(170,100,120) for _ in range(30)]
+    cargos.extend([Cargo(100,80,90) for _ in range(30)])
+    cargos.extend([Cargo(150,120,90) for _ in range(30)])
+    cargos.extend([Cargo(210,120,100) for _ in range(30)])
 
     case = Container(850,570,480)
     print(
