@@ -45,7 +45,7 @@ class Container(object):
         flag = Point(-1, -1, -1)  
         # 用于记录执行前的参考面位置, 便于后续比较
         history = [self._horizontal_planar, self._vertical_planar]
-        def __is_line_changed() -> bool:
+        def __is_planar_changed() -> bool:
             return (
                 not flag.is_valid and # 防止破坏已经确定可放置的点位, 即只能在(-1, -1, -1)基础上改
                 self._horizontal_planar == history[0] and 
@@ -72,7 +72,7 @@ class Container(object):
                 elif self._vertical_planar < self.height:
                     self._vertical_planar = self.height
                     self._horizontal_planar = self.length
-                    if __is_line_changed():
+                    if __is_planar_changed():
                         flag.z == 0 # 放置失败并调整参考面
             else:
                 for point in self._available_points:
@@ -88,7 +88,7 @@ class Container(object):
                         # 放置了货物 不检测参考面改变
                 if not flag.is_valid:
                     self._horizontal_planar = self.length
-                    if __is_line_changed():
+                    if __is_planar_changed():
                         flag.z == 0 # 放置失败并调整参考面
         if flag.is_valid:
             cargo.point = flag
